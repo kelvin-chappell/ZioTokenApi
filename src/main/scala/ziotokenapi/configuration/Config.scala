@@ -1,4 +1,4 @@
-package ziotokenapi
+package ziotokenapi.configuration
 
 case class Config(
     authHost: String,

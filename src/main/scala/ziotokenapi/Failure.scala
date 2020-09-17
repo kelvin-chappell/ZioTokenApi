@@ -2,6 +2,8 @@ package ziotokenapi
 
 trait Failure
 
+case class ConfigFailure(reason: String) extends Failure
+
 case class SfTokenReadFailure(reason: String) extends Failure
 object SfTokenReadFailure {
   def fromThrowable(t: Throwable): SfTokenReadFailure = SfTokenReadFailure(t.toString)

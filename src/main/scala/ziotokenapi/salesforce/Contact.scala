@@ -1,4 +1,4 @@
-package ziotokenapi
+package ziotokenapi.salesforce
 
 import upickle.default.{macroR, Reader}
 

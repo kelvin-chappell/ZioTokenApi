@@ -1,7 +1,6 @@
 package ziotokenapi
 
 import zio._
-import ziotokenapi.Config
 
 package object configuration {
 
@@ -15,11 +14,11 @@ package object configuration {
 
     val config: URIO[Configuration, Config] = ZIO.accessM(_.get.config)
 
-    val live: ZLayer[system.System, Throwable, Configuration] = ZLayer.fromServiceM { system =>
-      def env(key: String): Task[String] =
+    val live: ZLayer[system.System, Failure, Configuration] = ZLayer.fromServiceM { system =>
+      def env(key: String): ZIO[Any, Failure, String] =
         for {
-          optValue <- system.env(key)
-          value    <- ZIO.fromOption(optValue).orElseFail(new RuntimeException(s"No value for '$key' in environment"))
+          optValue <- system.env(key).mapError(e => ConfigFailure(e.toString))
+          value    <- ZIO.fromOption(optValue).orElseFail(ConfigFailure(s"No value for '$key' in environment"))
         } yield value
 
       for {
