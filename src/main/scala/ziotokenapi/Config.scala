@@ -1,4 +1,4 @@
-package example
+package ziotokenapi
 
 case class Config(
     authHost: String,
@@ -7,5 +7,5 @@ case class Config(
     clientId: String,
     clientSecret: String,
     authToken: String,
-    apiVersion: String
+    apiVersion: String = "46.0"
 )
