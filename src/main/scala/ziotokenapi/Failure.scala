@@ -13,8 +13,9 @@ case class SfTokenParseFailure(reason: String) extends Failure
 object SfTokenParseFailure {
   def fromThrowable(t: Throwable): SfTokenParseFailure = SfTokenParseFailure(t.toString)
 }
+
 case class SfReadFailure(reason: String) extends Failure
-object SfReadFailure       {
+object SfReadFailure {
   def fromThrowable(t: Throwable): SfReadFailure = SfReadFailure(t.toString)
 }
 

@@ -5,23 +5,24 @@ import upickle.default.read
 import zio.console.Console
 import zio.{Has, Task, ZIO, ZLayer}
 import ziotokenapi.configuration.Configuration
+import ziotokenapi.salesforce.auth.Access
 import ziotokenapi.{Failure, SfTokenParseFailure, SfTokenReadFailure}
 
-package object auth {
+package object authority {
 
-  type Auth = Has[Auth.Service]
+  type Authority = Has[Authority.Service]
 
-  object Auth {
+  object Authority {
     trait Service {
-      val authority: ZIO[Any, Failure, Authority]
+      val access: ZIO[Any, Failure, Access]
     }
 
-    val authority: ZIO[Auth, Failure, Authority] = ZIO.accessM(_.get.authority)
+    val access: ZIO[Authority, Failure, Access] = ZIO.accessM(_.get.access)
 
-    val live: ZLayer[Configuration with Console, Failure, Auth] =
-      ZLayer.fromServices[Configuration.Service, Console.Service, Auth.Service] { (configuration, console) =>
+    val live: ZLayer[Configuration with Console, Failure, Authority] =
+      ZLayer.fromServices[Configuration.Service, Console.Service, Authority.Service] { (configuration, console) =>
         new Service {
-          val authority: ZIO[Any, Failure, Authority] = for {
+          val access: ZIO[Any, Failure, Access] = for {
             config    <- configuration.config
             response  <- ZIO
                            .effect(
@@ -39,7 +40,7 @@ package object auth {
                            )
                            .mapError(SfTokenReadFailure.fromThrowable)
                            .tap(rsp => console.putStrLn(s"Response from makeToken: ${rsp.toString}\n"))
-            authority <- Task.effect(read[Authority](response.body)).mapError(SfTokenParseFailure.fromThrowable)
+            authority <- Task.effect(read[Access](response.body)).mapError(SfTokenParseFailure.fromThrowable)
           } yield authority
         }
       }

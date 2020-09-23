@@ -5,7 +5,7 @@ import upickle.default.read
 import zio._
 import zio.console.Console
 import ziotokenapi.configuration.Configuration
-import ziotokenapi.salesforce.auth.Auth
+import ziotokenapi.salesforce.authority.Authority
 
 package object salesforce {
 
@@ -19,13 +19,13 @@ package object salesforce {
 
     def fetchContact(id: String): ZIO[Salesforce, Failure, Contact] = ZIO.accessM(_.get.fetchContact(id))
 
-    val live: ZLayer[Auth with Configuration with Console, Failure, Salesforce] =
-      ZLayer.fromServices[Auth.Service, Configuration.Service, Console.Service, Salesforce.Service] {
+    val live: ZLayer[Authority with Configuration with Console, Failure, Salesforce] =
+      ZLayer.fromServices[Authority.Service, Configuration.Service, Console.Service, Salesforce.Service] {
         (auth, configuration, console) =>
           new Service {
             def fetchContact(id: String): ZIO[Any, Failure, Contact] =
               for {
-                authority <- auth.authority
+                authority <- auth.access
                 config    <- configuration.config
                 response  <-
                   ZIO

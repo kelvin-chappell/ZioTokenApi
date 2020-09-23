@@ -1,10 +1,10 @@
 package ziotokenapi
 
-import ziotokenapi.configuration.Configuration
-import ziotokenapi.salesforce.Salesforce
 import zio._
 import zio.console.Console
-import ziotokenapi.salesforce.auth.Auth
+import ziotokenapi.configuration.Configuration
+import ziotokenapi.salesforce.Salesforce
+import ziotokenapi.salesforce.authority.Authority
 
 object Main extends zio.App {
 
@@ -16,13 +16,12 @@ object Main extends zio.App {
       _        <- console.putStrLn(contact2.toString)
     } yield ()
 
-  def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = {
-    val value2: ZLayer[Configuration with Console with system.System, Failure, Auth with Configuration with Console] =
-      Auth.live ++ Configuration.live ++ Console.live
-    val value: ZLayer[zio.ZEnv, Failure, Salesforce]                                                                 =
-      Configuration.live ++ Console.live ++ system.System.live >>> value2 >>> Salesforce.live
+  def run(args: List[String]): URIO[zio.ZEnv, ExitCode] =
     program(args)
-      .provideCustomLayer(value)
+      .provideCustomLayer(
+        Console.live ++ Configuration.live >+>
+          Authority.live >+>
+          Salesforce.live
+      )
       .foldM(e => console.putStrLn(e.toString) *> ZIO.succeed(ExitCode.failure), _ => ZIO.succeed(ExitCode.success))
-  }
 }
