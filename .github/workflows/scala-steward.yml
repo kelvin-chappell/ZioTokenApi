@@ -17,7 +17,7 @@ jobs:
           java-version: 11    
           
       - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v2
+        uses: crazy-max/ghaction-import-gpg@v3
         with:
           git_user_signingkey: true
         env:
