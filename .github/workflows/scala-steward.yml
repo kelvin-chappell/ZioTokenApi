@@ -10,20 +10,23 @@ jobs:
   scala-steward:
     runs-on: ubuntu-latest
     steps:
-          
-      - name: Set up Java
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: Set up Java
         uses: actions/setup-java@v1
         with:
-          java-version: 11    
-          
-      - name: Import GPG key
+          java-version: 11
+      - 
+        name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v3
         with:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
           git-user-signingkey: true
-
-      - name: Launch Scala Steward
+      - 
+        name: Launch Scala Steward
         uses: scala-steward-org/scala-steward-action@v2
         with:
           github-token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
