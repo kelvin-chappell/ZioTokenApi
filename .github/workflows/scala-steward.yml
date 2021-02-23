@@ -3,7 +3,7 @@ name: Run Scala Steward
 # This workflow will launch at 00:00 every Sunday
 on:
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 7 * * *'
   workflow_dispatch:
 
 jobs:
@@ -16,8 +16,19 @@ jobs:
         with:
           java-version: 11    
           
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v2
+        with:
+          git_user_signingkey: true
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          PASSPHRASE:      ${{ secrets.GPG_PASSPHRASE }}
+
       - name: Launch Scala Steward
         uses: scala-steward-org/scala-steward-action@v2
         with:
           github-token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
-          author-email: 12345+octocat@users.noreply.github.com
+          sign-commits: true
+          author-name: Scala Steward Proxy
+          author-email: scala.steward.proxy@users.noreply.github.com
+    
