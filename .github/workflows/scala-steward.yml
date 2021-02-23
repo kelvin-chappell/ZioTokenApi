@@ -9,7 +9,6 @@ on:
 jobs:
   scala-steward:
     runs-on: ubuntu-latest
-    name: Launch Scala Steward
     steps:
           
       - name: Set up Java
