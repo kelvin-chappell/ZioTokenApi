@@ -31,6 +31,5 @@ jobs:
         with:
           github-token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           sign-commits: true
-          author-name: Scala Steward Proxy
-          author-email: scala.steward.proxy@users.noreply.github.com
-    
+          author-name: ${{ steps.import_gpg.outputs.name }}
+          author-email: ${{ steps.import_gpg.outputs.email }}
