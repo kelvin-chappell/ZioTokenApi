@@ -11,7 +11,7 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       scalaTest      % Test,
       "dev.zio"     %% "zio"         % "1.0.4-2",
-      "com.lihaoyi" %% "upickle"     % "1.2.0",
+      "com.lihaoyi" %% "upickle"     % "1.2.3",
       "org.scalaj"  %% "scalaj-http" % "2.4.2"
     )
   )
