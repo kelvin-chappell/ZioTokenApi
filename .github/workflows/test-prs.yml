@@ -1,22 +1,27 @@
-name: Test PRs
+name: Scala CI
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 jobs:
-  test:
+  build:
+
+    name: SBT test
     runs-on: ubuntu-latest
+
     steps:
-      - 
-        name: Checkout repo
-        uses: actions/checkout@v2
-      - 
-        name: Set up Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - 
-        name: Run tests
-        run: sbt test
-        
+    - 
+      name: Checkout repo
+      uses: actions/checkout@v2.3.4
+    - 
+      name: Set up Java
+      uses: actions/setup-java@v1.4.3
+      with:
+        java-version: 11
+    - 
+      name: Run tests
+      run: sbt test
+      

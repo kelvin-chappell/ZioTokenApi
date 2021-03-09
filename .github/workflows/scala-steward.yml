@@ -1,9 +1,6 @@
 name: Run Scala Steward
 
-# This workflow will launch at 00:00 every Sunday
 on:
-  schedule:
-    - cron: '0 7 * * *'
   workflow_dispatch:
 
 jobs:
@@ -11,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-        name: Checkout
+        name: Checkout repo
         uses: actions/checkout@v2
       - 
         name: Set up Java
